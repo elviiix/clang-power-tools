@@ -91,6 +91,16 @@ namespace ClangPowerTools.DialogPages
     #endregion
 
 
+    #region Public Methods
+
+    public ClangFormatOptionsView Clone()
+    {
+      // Use MemberwiseClone to copy value types.
+      var clone = (ClangFormatOptionsView)MemberwiseClone();
+      return clone;
+    }
+
+
     #region DialogPage Save and Load implementation 
 
 
@@ -151,15 +161,6 @@ namespace ClangPowerTools.DialogPages
 
     #endregion
 
-
-    #region Public Methods
-
-    public ClangFormatOptionsView Clone()
-    {
-      // Use MemberwiseClone to copy value types.
-      var clone = (ClangFormatOptionsView)MemberwiseClone();
-      return clone;
-    }
 
     #endregion
 
