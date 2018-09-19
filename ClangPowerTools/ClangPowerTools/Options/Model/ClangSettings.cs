@@ -4,146 +4,148 @@ using System.Xml.Serialization;
 namespace ClangPowerTools.Options.Model
 {
   [Serializable]
-  public class ScriptXmlElement
+  [XmlRoot(ElementName = "cpt-config")]
+  public class ClangSettings
   {
-    #region General Properties 
+    #region   Properties
 
 
-    [XmlElement("clang-flags")]
-    public string ClangFlags { get; set; }
+    #region Script Properties
+
+    [XmlElement("proj")]
+    public string Project { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeProject() => !string.IsNullOrWhiteSpace(Project);
 
 
-    [XmlElement("file-ignore")]
-    public string FilesToIgnore { get; set; }
+
+    [XmlElement("dir")]
+    public string SolutionsPath { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeSolutionsPath() => !string.IsNullOrWhiteSpace(SolutionsPath);
+
 
 
     [XmlElement("proj-ignore")]
     public string ProjectsToIgnore { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeProjectsToIgnore() => !string.IsNullOrWhiteSpace(ProjectsToIgnore);
+
+
+
+    [XmlElement("active-config")]
+    public string ConfigurationPlatform { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeConfigurationPlatform() => !string.IsNullOrWhiteSpace(ConfigurationPlatform);
+
+
+
+    [XmlElement("file")]
+    public string File { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeFile() => !string.IsNullOrWhiteSpace(File);
+
+
+
+    [XmlElement("file-ignore")]
+    public string FilesToIgnore { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeFilesToIgnore() => !string.IsNullOrWhiteSpace(FilesToIgnore);
+
+
+
+    [XmlElement("parallel")]
+    public bool Parallel { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeParallel() => Parallel;
+
+
+
+    [XmlElement("continue")]
+    public bool Continue { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeContinue() => Continue;
+
 
 
     [XmlElement("treat-sai")]
-    public ClangGeneralAdditionalIncludes? TreatAdditionalIncludesAs { get; set; }
+    public ClangGeneralAdditionalIncludes? AdditionalIncludes { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeAdditionalIncludes() => null != AdditionalIncludes;
 
 
-    [XmlElement("continue")] public bool Continue { get; set; } = true;
-    public bool ShouldSerializeContinue => true == Continue;
+
+    [XmlElement("clang-flags")]
+    public string ClangFlags { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeClangFlags() => !string.IsNullOrWhiteSpace(ClangFlags);
 
 
-    #endregion
 
+    [XmlElement("literal")]
+    public bool Literal { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeLiteral() => Literal;
 
-    #region Tidy Options Properties
 
 
     [XmlElement("tidy")]
-    public string TidyCustomChecks { get; set; }
+    public string TidyFlags { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeTidyFlags() => !string.IsNullOrWhiteSpace(TidyFlags);
 
 
-    [XmlElement("format-style")] public bool FormatAfterTidy { get; set; }
-    public bool ShouldSerializeFormatAfterTidy => true == FormatAfterTidy;
+
+    [XmlElement("tidy-fix")]
+    public string TidyFixFlags { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeTidyFixFlags() => !string.IsNullOrWhiteSpace(TidyFixFlags);
+
 
 
     [XmlElement("header-filter")]
     public string HeaderFilter { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeHeaderFilter() => !string.IsNullOrWhiteSpace(HeaderFilter);
 
 
-    #endregion
 
-  }
-
-
-  [Serializable]
-  public class ExtensionXmlElement
-  {
-    #region General Properties
+    [XmlElement("format-style")]
+    public bool FormatAfterTidy { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeFormatAfterTidy() => FormatAfterTidy;
 
 
-    [XmlElement] public bool TreatWarningsAsErrors { get; set; }
-    public bool ShouldSerializeTreatWarningsAsErrors => true == TreatWarningsAsErrors;
+
+    [XmlElement("vs-ver")]
+    public string VisualStudioVersion { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeVisualStudioVersion() => !string.IsNullOrWhiteSpace(VisualStudioVersion);
 
 
-    [XmlElement] public bool ClangCompileAfterVsCompile { get; set; }
-    public bool ShouldSerializeClangCompileAfterVsCompile => true == ClangCompileAfterVsCompile;
 
-
-    [XmlElement] public bool VerboseMode { get; set; }
-    public bool ShouldSerializeVerboseMode => true == VerboseMode;
-
-    public string Version { get; set; }
-
-
-    #endregion
-
-
-    #region Format Properties
-
-
-    #region Format On Save
-
-    [XmlElement] public bool FormatOnSave { get; set; }
-    public bool ShouldSerializeFormatOnSave => true == FormatOnSave;
-
-
-    public string FileExtensions { get; set; }
-
-    public string FormatSkipFiles { get; set; }
-
-    #endregion
-
-
-    #region Format Options
-
-    public string AssumeFilename { get; set; }
-
-    public ClangFormatFallbackStyle? FallbackStyle { get; set; }
-
-    //public bool SortIncludes { get; set; }
-
-    public ClangFormatStyle? Style { get; set; }
+    [XmlElement("vs-sku")]
+    public string VisualStudioEdition { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeVisualStudioEdition() => !string.IsNullOrWhiteSpace(VisualStudioEdition);
 
 
     #endregion
 
 
-    #region Clang-Format executable path
-
-    public ClangFormatPathValue ClangFormatPath { get; set; }
-
-    #endregion
+    #region General Clang Properties
 
 
-    #endregion
 
 
-    #region Tidy Options Properties
-
-
-    [XmlElement] public bool TidyOnSave { get; set; }
-    public bool ShouldSerializeTidyOnSave => true == TidyOnSave;
-
-
-    public ClangTidyUseChecksFrom? UseChecksFrom { get; set; }
-
-    #endregion
-  }
-
-
-  [Serializable]
-  [XmlRoot(ElementName = "cpt-config")]
-  public class ClangSettings
-  {
-    #region Properties
-
-
-    [XmlElement("ScriptOptions")]
-    public ScriptXmlElement ScriptXmlElements { get; set; }
-
-
-    [XmlElement("ExtensionOptions")]
-    public ExtensionXmlElement ExtensionXmlElements { get; set; }
 
 
     #endregion
+
+
+
+    #endregion
+
 
   }
 }
