@@ -7,6 +7,16 @@ namespace ClangPowerTools.Options.Model
   [XmlRoot(ElementName = "cpt-config")]
   public class ClangSettings
   {
+    #region Members
+
+
+    private string mConfigFilePath; 
+
+
+    #endregion
+
+
+
     #region   Properties
 
 
@@ -133,15 +143,131 @@ namespace ClangPowerTools.Options.Model
     #endregion
 
 
-    #region General Clang Properties
+    #region Clang General Properties
+
+
+    [XmlElement("treat-warnings-as-errors-vsix")]
+    public bool TreatWarningsAsErrors { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeTreatWarningsAsErrors() => TreatWarningsAsErrors;
 
 
 
+    [XmlElement("clang-compile-after-vs-compile-vsix")]
+    public bool ClangCompileAfterVsCompile { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeClangCompileAfterVsCompile() => ClangCompileAfterVsCompile;
+
+
+
+    [XmlElement("verbose-mode-vsix")]
+    public bool VerboseMode { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeVerboseMode() => VerboseMode;
+
+
+
+    [XmlElement("version-vsix")]
+    public string Version { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeVersion() => null != Version;
+
+
+    #endregion
+
+
+    #region Tidy Options Properties
+
+
+    // ClangTidyChecks is the same as the parameters: tidy and tidy-fix from the script parameters section
+
+
+    [XmlElement("tidy-on-save-vsix")]
+    public bool TidyOnSave { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeTidyOnSave() => TidyOnSave;
+
+
+    [XmlElement("tidy-use-checks-from-vsix")]
+    public ClangTidyUseChecksFrom? TidyUseChecksFrom { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeTidyUseChecksFrom() => null != TidyUseChecksFrom;
 
 
 
     #endregion
 
+
+
+    #region Properties 
+
+
+    #region Format On Save
+
+    [XmlElement("format-on-save-vsix")]
+    public bool FormatOnSave { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeFormatOnSave() => FormatOnSave;
+
+
+
+    [XmlElement("file-extensions-vsix")]
+    public string FileExtensions { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeFileExtensions() => !string.IsNullOrWhiteSpace(FileExtensions);
+
+
+
+    [XmlElement("skip-files-vsix")]
+    public string SkipFiles { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeSkipFiles() => !string.IsNullOrWhiteSpace(SkipFiles);
+
+
+    #endregion
+
+
+    #region Format Options
+
+
+    [XmlElement("assume-filename-vsix")]
+    public string AssumeFilename { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeAssumeFilename() => !string.IsNullOrWhiteSpace(AssumeFilename);
+
+
+
+    [XmlElement("fallback-style-vsix")]
+    public ClangFormatFallbackStyle? FallbackStyle { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeFallbackStyle() => null != FallbackStyle;
+
+
+    //public bool SortIncludes { get; set; }
+
+
+    [XmlElement("style-vsix")]
+    public ClangFormatStyle? Style { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeStyle() => null != Style;
+
+
+    #endregion
+
+
+    #region Clang-Format executable path
+
+
+    [XmlElement("clang-format-path-vsix")]
+    public ClangFormatPathValue ClangFormatPath { get; set; }
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Always)]
+    public bool ShouldSerializeClangFormatPath() => null != ClangFormatPath && !string.IsNullOrWhiteSpace(ClangFormatPath.Value);
+
+
+    #endregion
+
+
+    #endregion
 
 
     #endregion
