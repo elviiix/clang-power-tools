@@ -1,5 +1,4 @@
-﻿using ClangPowerTools.DialogPages;
-using ClangPowerTools.Output;
+﻿using ClangPowerTools.Output;
 using ClangPowerTools.Services;
 using ClangPowerTools.SilentFile;
 using EnvDTE;
@@ -40,14 +39,14 @@ namespace ClangPowerTools.Commands
     /// <param name="package">Owner package, not null.</param>
 
     private TidyCommand(OleMenuCommandService aCommandService, CommandsController aCommandsController, 
-      ErrorWindowController aErrorWindow, OutputWindowController aOutputWindow, AsyncPackage aPackage, Guid aGuid, int aId)
-        : base(aCommandsController, aErrorWindow, aOutputWindow, aPackage, aGuid, aId)
+      ErrorWindowController aErrorWindow, AsyncPackage aPackage, Guid aGuid, int aId)
+        : base(aErrorWindow, aPackage, aGuid, aId)
     {
       if (null != aCommandService)
       {
         var menuCommandID = new CommandID(CommandSet, Id);
-        var menuCommand = new OleMenuCommand(mCommandsController.Execute, menuCommandID);
-        menuCommand.BeforeQueryStatus += mCommandsController.OnBeforeClangCommand;
+        var menuCommand = new OleMenuCommand(aCommandsController.Execute, menuCommandID);
+        menuCommand.BeforeQueryStatus += aCommandsController.OnBeforeClangCommand;
         menuCommand.Enabled = true;
         aCommandService.AddCommand(menuCommand);
       }
@@ -65,25 +64,20 @@ namespace ClangPowerTools.Commands
     /// </summary>
     /// <param name="package">Owner package, not null.</param>
     public static async System.Threading.Tasks.Task InitializeAsync(CommandsController aCommandsController, 
-      ErrorWindowController aErrorWindow, OutputWindowController aOutputWindow, AsyncPackage aPackage, Guid aGuid, int aId)
+      ErrorWindowController aErrorWindow, AsyncPackage aPackage, Guid aGuid, int aId)
     {
       // Switch to the main thread - the call to AddCommand in TidyCommand's constructor requires
       // the UI thread.
       await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(aPackage.DisposalToken);
 
       OleMenuCommandService commandService = await aPackage.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-      Instance = new TidyCommand(commandService, aCommandsController, aErrorWindow, aOutputWindow, aPackage, aGuid, aId);
+      Instance = new TidyCommand(commandService, aCommandsController, aErrorWindow, aPackage, aGuid, aId);
     }
 
 
-    public void RunClangTidy(int aCommandId)
+    public System.Threading.Tasks.Task RunClangTidy(int aCommandId)
     {
-      if (mCommandsController.Running)
-        return;
-
-      mCommandsController.Running = true;
-
-      var task = System.Threading.Tasks.Task.Run(() =>
+      return System.Threading.Tasks.Task.Run(() =>
       {
         try
         {
@@ -127,11 +121,8 @@ namespace ClangPowerTools.Commands
           VsShellUtilities.ShowMessageBox(AsyncPackage, exception.Message, "Error",
             OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
-      }).ContinueWith(tsk => mCommandsController.OnAfterClangCommand());
+      });
     }
-
-
-
 
     #endregion
 

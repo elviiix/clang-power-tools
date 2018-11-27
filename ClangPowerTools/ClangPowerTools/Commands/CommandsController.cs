@@ -1,7 +1,6 @@
 ﻿using ClangPowerTools.Commands;
 using ClangPowerTools.DialogPages;
 using ClangPowerTools.Handlers;
-using ClangPowerTools.Output;
 using ClangPowerTools.Services;
 using EnvDTE;
 using EnvDTE80;
@@ -33,7 +32,7 @@ namespace ClangPowerTools
     /// <summary>
     /// Running flag for clang commands
     /// </summary>
-    public bool Running { get; set; }
+    public bool Running { get; set; } = false;
 
 
     /// <summary>
@@ -64,9 +63,34 @@ namespace ClangPowerTools
     #region Public Methods
 
 
-    public void Execute(object sender, EventArgs e)
+    public async System.Threading.Tasks.Task InitializeAsyncCommands(AsyncPackage aAsyncPackage, ErrorWindowController aErrorController)
+    {
+      if (null == CompileCommand.Instance)
+        await CompileCommand.InitializeAsync(this, aErrorController, aAsyncPackage, mCommandSet, CommandIds.kCompileId);
+
+      if (null == TidyCommand.Instance)
+      {
+        await TidyCommand.InitializeAsync(this, aErrorController, aAsyncPackage, mCommandSet, CommandIds.kTidyId);
+        await TidyCommand.InitializeAsync(this, aErrorController, aAsyncPackage, mCommandSet, CommandIds.kTidyFixId);
+      }
+
+      if (null == ClangFormatCommand.Instance)
+        await ClangFormatCommand.InitializeAsync(this, aErrorController, aAsyncPackage, mCommandSet, CommandIds.kClangFormat);
+
+      if (null == StopClang.Instance)
+        await StopClang.InitializeAsync(this, aErrorController, aAsyncPackage, mCommandSet, CommandIds.kStopClang);
+
+      if (null == SettingsCommand.Instance)
+        await SettingsCommand.InitializeAsync(this, aAsyncPackage, mCommandSet, CommandIds.kSettingsId);
+    }
+
+
+    public async void Execute(object sender, EventArgs e)
     {
       if (!(sender is OleMenuCommand command))
+        return;
+
+      if (Running)
         return;
 
       switch (command.CommandID.ID)
@@ -84,60 +108,43 @@ namespace ClangPowerTools
           break;
 
         case CommandIds.kCompileId:
-          CompileCommand.Instance.RunClangCompile(CommandIds.kCompileId);
+          Running = true;
+          await CompileCommand.Instance.RunClangCompile(CommandIds.kCompileId);
+          OnAfterClangCommand();
           break;
 
         case CommandIds.kTidyId:
-          TidyCommand.Instance.RunClangTidy(CommandIds.kTidyId);
+          Running = true;
+          await TidyCommand.Instance.RunClangTidy(CommandIds.kTidyId);
+          OnAfterClangCommand();
           break;
 
         case CommandIds.kTidyFixId:
-          TidyCommand.Instance.RunClangTidy(CommandIds.kTidyFixId);
+          Running = true;
+          await TidyCommand.Instance.RunClangTidy(CommandIds.kTidyFixId);
+          OnAfterClangCommand();
           break;
       }
     }
 
 
-    public async System.Threading.Tasks.Task InitializeAsyncCommands(AsyncPackage aAsyncPackage,
-      ErrorWindowController aErrorController, OutputWindowController aOutputWindowController)
-    {
-      if (null == CompileCommand.Instance)
-        await CompileCommand.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kCompileId);
-
-      if (null == TidyCommand.Instance)
-      {
-        await TidyCommand.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kTidyId);
-        await TidyCommand.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kTidyFixId);
-      }
-
-      if (null == ClangFormatCommand.Instance)
-        await ClangFormatCommand.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kClangFormat);
-
-      if (null == StopClang.Instance)
-        await StopClang.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kStopClang);
-
-      if (null == SettingsCommand.Instance)
-        await SettingsCommand.InitializeAsync(this, aAsyncPackage, mCommandSet, CommandIds.kSettingsId);
-    }
-
-
-    /// <summary>
-    /// It is called immediately after every clang command execution.
-    /// Set the running state to false.
-    /// </summary>
-    public void OnAfterClangCommand()
-    {
-      UIUpdater.Invoke(() =>
-      {
-        Running = false;
-      });
-    }
 
 
     #endregion
 
 
     #region Private Methods
+
+
+
+    /// <summary>
+    /// It is called immediately after every clang command execution.
+    /// Set the running state to false.
+    /// </summary>
+    private void OnAfterClangCommand()
+    {
+      Running = false;
+    }
 
 
     private string GetCommandName(string aGuid, int aId)
