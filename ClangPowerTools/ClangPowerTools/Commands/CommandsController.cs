@@ -1,5 +1,6 @@
 ﻿using ClangPowerTools.Commands;
 using ClangPowerTools.DialogPages;
+using ClangPowerTools.Events;
 using ClangPowerTools.Handlers;
 using ClangPowerTools.Services;
 using EnvDTE;
@@ -22,6 +23,8 @@ namespace ClangPowerTools
     private AsyncPackage mAsyncPackage;
     private Commands2 mCommand;
     private bool mSaveCommandWasGiven = false;
+
+    public event EventHandler<ClangCommandEventArgs> ClangCommandEvent;
 
     #endregion
 
@@ -108,26 +111,24 @@ namespace ClangPowerTools
           break;
 
         case CommandIds.kCompileId:
-          Running = true;
+          OnBeforeClangCommand(CommandIds.kCompileId);
           await CompileCommand.Instance.RunClangCompile(CommandIds.kCompileId);
-          OnAfterClangCommand();
+          OnAfterClangCommand(CommandIds.kCompileId);
           break;
 
         case CommandIds.kTidyId:
-          Running = true;
+          OnBeforeClangCommand(CommandIds.kTidyId);
           await TidyCommand.Instance.RunClangTidy(CommandIds.kTidyId);
-          OnAfterClangCommand();
+          OnAfterClangCommand(CommandIds.kTidyId);
           break;
 
         case CommandIds.kTidyFixId:
-          Running = true;
+          OnBeforeClangCommand(CommandIds.kTidyFixId);
           await TidyCommand.Instance.RunClangTidy(CommandIds.kTidyFixId);
-          OnAfterClangCommand();
+          OnAfterClangCommand(CommandIds.kTidyFixId);
           break;
       }
     }
-
-
 
 
     #endregion
@@ -136,14 +137,23 @@ namespace ClangPowerTools
     #region Private Methods
 
 
+    private void OnBeforeClangCommand(int aCommandId)
+    {
+      Running = true;
+      OnCommandTriggered(new ClangCommandEventArgs($"\nStart {OutputWindowConstants.kCommandsNames[aCommandId]}\n", true));
+    }
 
-    /// <summary>
-    /// It is called immediately after every clang command execution.
-    /// Set the running state to false.
-    /// </summary>
-    private void OnAfterClangCommand()
+
+    private void OnAfterClangCommand(int aCommandId)
     {
       Running = false;
+      OnCommandTriggered(new ClangCommandEventArgs($"\nDone {OutputWindowConstants.kCommandsNames[aCommandId]}\n", false));
+    }
+
+
+    protected virtual void OnCommandTriggered(ClangCommandEventArgs e)
+    {
+      ClangCommandEvent?.Invoke(this, e);
     }
 
 
