@@ -6,6 +6,7 @@ using ClangPowerTools.Services;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.IO;
 using System.Linq;
@@ -23,6 +24,9 @@ namespace ClangPowerTools
     private AsyncPackage mAsyncPackage;
     private Commands2 mCommand;
     private bool mSaveCommandWasGiven = false;
+
+    private IVsHierarchy mHierarchy;
+    public event EventHandler<VsHierarchyDetectedEventArgs> HierarchyDetectedEvent;
 
     public event EventHandler<ClangCommandEventArgs> ClangCommandEvent;
 
@@ -42,6 +46,19 @@ namespace ClangPowerTools
     /// Running flag for Visual Studio build
     /// </summary>
     public bool VsBuildRunning { get; set; }
+
+
+    //private IVsHierarchy ItemHierarchy
+    //{
+    //  get => ItemHierarchy;
+    //  set
+    //  {
+    //    if (null == value)
+    //      return;
+    //    mHierarchy = value;
+    //    OnFileHierarchyChanged(new VsHierarchyDetectedEventArgs(mHierarchy));
+    //  }
+    //}
 
 
     #endregion
@@ -85,6 +102,9 @@ namespace ClangPowerTools
 
       if (null == SettingsCommand.Instance)
         await SettingsCommand.InitializeAsync(this, aAsyncPackage, mCommandSet, CommandIds.kSettingsId);
+
+      CompileCommand.Instance.HierarchyDetectedEvent += OnFileHierarchyChanged;
+      TidyCommand.Instance.HierarchyDetectedEvent += OnFileHierarchyChanged;
     }
 
 
@@ -154,6 +174,12 @@ namespace ClangPowerTools
     protected virtual void OnCommandTriggered(ClangCommandEventArgs e)
     {
       ClangCommandEvent?.Invoke(this, e);
+    }
+
+
+    protected virtual void OnFileHierarchyChanged(object sender, VsHierarchyDetectedEventArgs e)
+    {
+      HierarchyDetectedEvent?.Invoke(this, e);
     }
 
 
