@@ -94,6 +94,10 @@ namespace ClangPowerTools
         case CommandIds.kTidyFixId:
           TidyCommand.Instance.RunClangTidy(CommandIds.kTidyFixId);
           break;
+
+       case CommandIds.kCompilerExplorerId:
+          CompilerExplorerCommand.Instance.RunCompilerExplorer(CommandIds.kCompilerExplorerId);
+          break;      
       }
     }
 
@@ -101,23 +105,34 @@ namespace ClangPowerTools
     public async System.Threading.Tasks.Task InitializeAsyncCommands(AsyncPackage aAsyncPackage,
       ErrorWindowController aErrorController, OutputWindowController aOutputWindowController)
     {
-      if (null == CompileCommand.Instance)
+      if (CompileCommand.Instance == null)
         await CompileCommand.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kCompileId);
 
-      if (null == TidyCommand.Instance)
+      if (TidyCommand.Instance == null)
       {
         await TidyCommand.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kTidyId);
         await TidyCommand.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kTidyFixId);
       }
 
-      if (null == ClangFormatCommand.Instance)
+      if (ClangFormatCommand.Instance == null)
+      {
         await ClangFormatCommand.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kClangFormat);
+      }
 
-      if (null == StopClang.Instance)
+      if (StopClang.Instance == null)
+      {
         await StopClang.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kStopClang);
+      }
 
-      if (null == SettingsCommand.Instance)
+      if (SettingsCommand.Instance == null)
+      {
         await SettingsCommand.InitializeAsync(this, aAsyncPackage, mCommandSet, CommandIds.kSettingsId);
+      }
+
+      if(CompilerExplorerCommand.Instance == null)
+      {
+        await CompilerExplorerCommand.InitializeAsync(this, aErrorController, aOutputWindowController, aAsyncPackage, mCommandSet, CommandIds.kCompilerExplorerId);
+      }
     }
 
 

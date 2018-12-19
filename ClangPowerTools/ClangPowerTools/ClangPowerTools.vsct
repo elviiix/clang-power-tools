@@ -160,14 +160,6 @@
           <ButtonText>Settings</ButtonText>
         </Strings>
       </Button>
-
-      <Button guid="guidRunClangPowerToolsPackageCmdSet" id="cmdidCommand1" priority="0x0100" type="Button">
-        <Parent guid="guidRunClangPowerToolsPackageCmdSet" id="MyMenuGroup" />
-        <Icon guid="guidImages2" id="bmpPic1" />
-        <Strings>
-          <ButtonText>Invoke Command1</ButtonText>
-        </Strings>
-      </Button>
     </Buttons>
 
     <Bitmaps>
@@ -310,31 +302,13 @@
       <IDSymbol name="Format" value="1" />
     </GuidSymbol>
 
-    <GuidSymbol name="guidImageCompilerExplorer" value="{6ef146ba-e044-43ab-989d-c4a1d6d5c71b}">
+    <GuidSymbol name="guidImageCompilerExplorer" value="{5d0d8db0-0f81-4c25-a19f-3d29f18bc1de}">
       <IDSymbol name="CompilerExplorer" value="1" />
-    </GuidSymbol>
-
-    <GuidSymbol value="{e354bc96-69a2-474c-8ab1-a84283a4e077}" name="guidImages1">
-      <IDSymbol name="bmpPic1" value="1" />
-      <IDSymbol name="bmpPic2" value="2" />
-      <IDSymbol name="bmpPicSearch" value="3" />
-      <IDSymbol name="bmpPicX" value="4" />
-      <IDSymbol name="bmpPicArrows" value="5" />
-      <IDSymbol name="bmpPicStrikethrough" value="6" />
     </GuidSymbol>
   
     <GuidSymbol value="{ff4f27ca-88ae-488e-8aa5-9720b66bc9a5}" name="guidRunClangPowerToolsPackageCmdSet">
       <IDSymbol value="4128" name="MyMenuGroup" />
       <IDSymbol value="256" name="cmdidCommand1" />
-    </GuidSymbol>
-  
-    <GuidSymbol value="{0c6817a0-1902-4162-8836-55ae3614c7f9}" name="guidImages2">
-      <IDSymbol name="bmpPic1" value="1" />
-      <IDSymbol name="bmpPic2" value="2" />
-      <IDSymbol name="bmpPicSearch" value="3" />
-      <IDSymbol name="bmpPicX" value="4" />
-      <IDSymbol name="bmpPicArrows" value="5" />
-      <IDSymbol name="bmpPicStrikethrough" value="6" />
     </GuidSymbol>
   </Symbols>
 
