@@ -92,7 +92,7 @@
         </Strings>
       </Button>
 
-      <Button guid="guidClangPowerToolsPackageCmdSet" id="CompilerExplorerId" priority="0x0006" type="Button">
+      <Button guid="guidClangPowerToolsPackageCmdSet" id="CompilerExplorerId" priority="0x0005" type="Button">
         <Icon guid="guidImageCompilerExplorer" id="CompilerExplorer" />
         <CommandFlag>DefaultDisabled</CommandFlag>
         <Strings>
@@ -100,7 +100,7 @@
         </Strings>
       </Button>
 
-      <Button guid="guidClangPowerToolsPackageCmdSet" id="SettingsId" priority="0x0005" type="Button">
+      <Button guid="guidClangPowerToolsPackageCmdSet" id="SettingsId" priority="0x0006" type="Button">
         <Icon guid="guidImageSettings" id="Settings" />
         <Strings>
           <ButtonText>Settings</ButtonText>
@@ -147,14 +147,14 @@
         </Strings>
       </Button>
 
-      <Button guid="guidClangPowerToolsPackageCmdSet" id="CompilerExplorerId" priority="0x0006" type="Button">
+      <Button guid="guidClangPowerToolsPackageCmdSet" id="CompilerExplorerId" priority="0x0005" type="Button">
         <Parent guid="guidClangPowerToolsPackageCmdSet" id="ToolbarGroup" />
         <Strings>
           <ButtonText>Compiler Explorer</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidClangPowerToolsPackageCmdSet" id="SettingsId" priority="0x0005" type="Button">
+      <Button guid="guidClangPowerToolsPackageCmdSet" id="SettingsId" priority="0x0006" type="Button">
         <Parent guid="guidClangPowerToolsPackageCmdSet" id="ToolbarGroup" />
         <Strings>
           <ButtonText>Settings</ButtonText>
@@ -239,11 +239,11 @@
       <Parent guid="guidClangPowerToolsPackageCmdSet" id="GroupForCommands" />
     </CommandPlacement>
 
-    <CommandPlacement guid="guidClangPowerToolsPackageCmdSet" id="CompilerExplorerId" priority="0x0006">
+    <CommandPlacement guid="guidClangPowerToolsPackageCmdSet" id="CompilerExplorerId" priority="0x0005">
       <Parent guid="guidClangPowerToolsPackageCmdSet" id="GroupForCommands" />
     </CommandPlacement>
 
-    <CommandPlacement guid="guidClangPowerToolsPackageCmdSet" id="SettingsId" priority="0x0005">
+    <CommandPlacement guid="guidClangPowerToolsPackageCmdSet" id="SettingsId" priority="0x0006">
       <Parent guid="guidClangPowerToolsPackageCmdSet" id="GroupForSettings" />
     </CommandPlacement>
 
