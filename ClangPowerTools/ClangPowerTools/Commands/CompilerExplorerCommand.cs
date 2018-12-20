@@ -76,7 +76,13 @@ namespace ClangPowerTools.Commands
         /// <param name="e">Event args.</param>
         public void RunCompilerExplorer(int aCommandId)
         {
-            MessageBox.Show("Hello World");
+            string website = @"https://godbolt.org/";
+
+            IVsWindowFrame ppFrame;
+            IVsWebBrowsingService service = Package.GetGlobalService(typeof(IVsWebBrowsingService)) as IVsWebBrowsingService;
+            service.Navigate(website, (uint)__VSWBNAVIGATEFLAGS.VSNWB_ForceNew, out ppFrame);
+
+            System.Diagnostics.Process.Start(website);
         }
 
         #endregion;
